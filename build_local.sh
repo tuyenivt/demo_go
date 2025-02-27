@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-services=("notification-service") # "next-service"
+services=("fhir-gateway") # "next-service"
 
 echo "Starting local build and test for all services..."
 

@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
@@ -11,13 +11,13 @@ RUN go mod download
 COPY . .
 
 # Build the binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o notification-service ./cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fhir-gateway ./cmd/main.go
 
 # Stage 2: Production-ready image
 FROM alpine:3.21
 
 WORKDIR /app
-COPY --from=builder /app/notification-service /app/notification-service
+COPY --from=builder /app/fhir-gateway /app/fhir-gateway
 
 # Non-root user (optional security best practice)
 # RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -26,4 +26,4 @@ COPY --from=builder /app/notification-service /app/notification-service
 # Expose port if needed
 EXPOSE 8080
 
-ENTRYPOINT ["/app/notification-service"]
+ENTRYPOINT ["/app/fhir-gateway"]
