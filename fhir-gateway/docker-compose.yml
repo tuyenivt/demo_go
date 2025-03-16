@@ -1,17 +1,18 @@
 version: '3.8'
 services:
   db:
-    image: mysql:8.4
+    image: postgres:17.4
     environment:
-      MYSQL_USER: fhiruser
-      MYSQL_PASSWORD: fhirpassword
-      MYSQL_DATABASE: fhirdb
+      POSTGRES_USER: fhiruser
+      POSTGRES_PASSWORD: fhirpassword
+      POSTGRES_DB: fhirdb
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD", "mysql", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "${MYSQL_DATABASE}", "-e", "SELECT 1"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -19,7 +20,7 @@ services:
   app:
     build: .
     environment:
-      DATABASE_URL: fhiruser:fhirpassword@tcp(db:3306)/fhirdb
+      DB_URL: postgres://fhiruser:fhirpassword@db:5432/fhirdb?sslmode=disable
     ports:
       - "8080:8080"
     depends_on:
@@ -27,4 +28,4 @@ services:
         condition: service_healthy
 
 volumes:
-  mysql_data:
+  postgres_data:
