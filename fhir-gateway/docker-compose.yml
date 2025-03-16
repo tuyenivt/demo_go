@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_USER: fhiruser
+      MYSQL_PASSWORD: fhirpassword
+      MYSQL_DATABASE: fhirdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "${MYSQL_DATABASE}", "-e", "SELECT 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: fhiruser:fhirpassword@tcp(db:3306)/fhirdb
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

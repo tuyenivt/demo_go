@@ -18,3 +18,21 @@
 docker run -d --name fhir-mysql -e MYSQL_USER=fhiruser -e MYSQL_PASSWORD=fhirpassword -e MYSQL_DATABASE=fhirdb -p 3306:3306 mysql:8.4
 ```
 
+## Quick Start
+1. Environment Variables
+```bash
+API_SERVER_PORT=8080
+API_KEY=supersecret
+MYSQL_USER=fhiruser
+MYSQL_PASSWORD=fhirpassword
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DATABASE=fhirdb
+```
+
+2. Run with Docker Compose
+```bash
+docker-compose up --build
+```
+Access the service at http://localhost:8080. Set header X-API-Key: supersecret for requests.
+
