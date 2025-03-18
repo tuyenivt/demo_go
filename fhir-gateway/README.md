@@ -9,6 +9,7 @@
 - API Key middleware
 - GORM-based PostgreSQL storage
 - Structured logging
+- Exposed metrics collected by Prometheus
 
 ## Quick Start
 1. Run with Docker Compose
@@ -17,7 +18,9 @@ docker-compose up --build
 ```
 Access the service at http://localhost:8080. Set header X-API-Key for requests.
 
-2. Access the API with Sample Request
+2. Access the API
+
+Create new Patient
 ```shell
 curl -X POST http://localhost:8080/fhir/r4/Patient -H "Content-Type: application/json" -H "X-API-KEY: test-api-key-1" \
 -d '{
@@ -39,8 +42,16 @@ curl -X POST http://localhost:8080/fhir/r4/Patient -H "Content-Type: application
     }],
     "active": true
 }'
+```
 
+Get Patient created
+```shell
 curl -H "X-API-KEY: test-api-key-1" http://localhost:8080/fhir/r4/Patient/patient-001
+```
+
+Get metrics
+```shell
+curl http://localhost:8080/metrics
 ```
 
 3. Local Development
@@ -53,6 +64,7 @@ go get gorm.io/gorm
 go get gorm.io/driver/postgres
 go get github.com/swaggo/files
 go get github.com/sirupsen/logrus
+go get github.com/prometheus/client_golang/prometheus/promhttp
 ```
 - PostgreSQL
 ```shell

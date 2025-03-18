@@ -8,6 +8,7 @@ import (
 	"runtime"
 
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -24,6 +25,9 @@ func main() {
 
 	// Setup routes
 	router := gin.Default()
+
+	// Setup monitoring
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Setup middleware
 	router.Use(middleware.AuthMiddleware(db))
