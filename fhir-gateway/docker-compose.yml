@@ -17,14 +17,27 @@ services:
       timeout: 5s
       retries: 5
 
+  cache:
+    image: valkey/valkey:8.0
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   app:
     build: .
     environment:
       DB_URL: postgres://fhiruser:fhirpassword@db:5432/fhirdb?sslmode=disable
+      CACHE_URL: cache:6379
     ports:
       - "8080:8080"
     depends_on:
       db:
+        condition: service_healthy
+      cache:
         condition: service_healthy
 
 volumes:
