@@ -70,7 +70,7 @@ go get github.com/valkey-io/valkey-go
 ```
 - PostgreSQL
 ```shell
-docker run -d --name fhir-postgres -e POSTGRES_USER=fhiruser -e POSTGRES_PASSWORD=fhirpassword -e POSTGRES_DB=fhirdb -p 5432:5432 postgres:17.4
+docker run -d --name fhir-postgres -e POSTGRES_USER=fhiruser -e POSTGRES_PASSWORD=fhirpassword -e POSTGRES_DB=fhirdb -p 5432:5432 postgres:17.4-alpine
 docker run -d --name fhir-valkey -p 6379:6379 valkey/valkey:8.0
 ```
 Import initial database schema: `migrations/000001_create_tables.up.sql`
