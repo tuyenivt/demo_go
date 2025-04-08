@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  rtb-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - rtb-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - rtb-network
+
+networks:
+  rtb-network:
+    driver: bridge
+
+volumes:
+  redis-data:
