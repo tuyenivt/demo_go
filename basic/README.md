@@ -23,6 +23,8 @@ docker network create devnet
 docker run -d --network devnet --name workout-postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=workoutdb -p 5432:5432 postgres:17.6-alpine
 ```
 
+- Create database tables by using sql scripts in `migrations` folder (skipped database migrations with Goose).
+
 - Install Go 1.25 or higher
 - Install dependencies
 
