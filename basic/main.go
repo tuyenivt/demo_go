@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer app.DB.Close()
 
 	app.Logger.Printf("we are running out app on port %d\n", port)
 
