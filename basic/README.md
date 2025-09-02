@@ -102,3 +102,9 @@ curl -X PUT http://localhost:8080/workouts/1 \
            ]
          }'
 ```
+
+### Delete workout
+
+```shell
+curl -X DELETE http://localhost:8080/workouts/1
+```

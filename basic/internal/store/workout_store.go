@@ -36,6 +36,7 @@ type WorkoutStore interface {
 	GetWorkoutByID(id int64) (*Workout, error)
 	CreateWorkout(*Workout) (*Workout, error)
 	UpdateWorkout(*Workout) error
+	DeleteWorkoutByID(id int64) error
 }
 
 func (pg *PostgreWorkoutStore) GetWorkoutByID(id int64) (*Workout, error) {
@@ -153,4 +154,22 @@ func (pg *PostgreWorkoutStore) UpdateWorkout(workout *Workout) error {
 	}
 
 	return tx.Commit()
+}
+
+func (pg *PostgreWorkoutStore) DeleteWorkoutByID(id int64) error {
+	query := `DELETE FROM workouts WHERE id = $1`
+	result, err := pg.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
 }

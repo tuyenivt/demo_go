@@ -2,6 +2,7 @@ package api
 
 import (
 	"basic/internal/store"
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -114,4 +115,30 @@ func (wh *WorkoutHandler) HandleUpdateWorkout(w http.ResponseWriter, r *http.Req
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(updatedWorkout)
+}
+
+func (wh *WorkoutHandler) HandleDeleteWorkoutByID(w http.ResponseWriter, r *http.Request) {
+	paramsWorkoutID := chi.URLParam(r, "id")
+	if paramsWorkoutID == "" {
+		http.Error(w, "'id' param is required", http.StatusNotFound)
+		return
+	}
+
+	workoutID, err := strconv.ParseInt(paramsWorkoutID, 10, 64)
+	if err != nil {
+		http.Error(w, "'id' param must be integer", http.StatusBadRequest)
+		return
+	}
+	wh.logger.Printf("Requesting delete workout data with id: %d\n", workoutID)
+
+	err = wh.workoutStore.DeleteWorkoutByID(workoutID)
+	if err == sql.ErrNoRows {
+		http.Error(w, "Can't found workout data", http.StatusNotFound)
+		return
+	} else if err != nil {
+		http.Error(w, "Can't delete workout data", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
