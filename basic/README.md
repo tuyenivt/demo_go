@@ -71,3 +71,34 @@ curl -X POST http://localhost:8080/workouts \
 ```shell
 curl http://localhost:8080/workouts/1
 ```
+
+### Update workout
+
+```shell
+curl -X PUT http://localhost:8080/workouts/1 \
+     -H "Content-Type: application/json" \
+     -d '{
+           "title": "Title 1.1",
+           "description": "Description 1.1",
+           "duration_minutes": 61,
+           "calories_burned": 501,
+           "entries": [
+                {
+                    "exercise_name": "Exercise Name 1.1",
+                    "sets": 1,
+                    "reps": 2,
+                    "weight": 15.11,
+                    "notes": "Note 1.1",
+                    "order_index": 1
+                },
+                {
+                    "exercise_name": "Exercise Name 2.1",
+                    "sets": 2,
+                    "reps": 3,
+                    "weight": 15.21,
+                    "notes": "Note 2.1",
+                    "order_index": 2
+                }
+           ]
+         }'
+```
