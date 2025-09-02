@@ -30,6 +30,7 @@ func (wh *WorkoutHandler) HandleGetWorkoutByID(w http.ResponseWriter, r *http.Re
 		http.NotFound(w, r)
 		return
 	}
+	fmt.Printf("Requesting workout data with id: %d\n", workoutID)
 
 	gotWorkout, err := wh.workoutStore.GetWorkoutByID(workoutID)
 	if err != nil {
