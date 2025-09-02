@@ -11,7 +11,7 @@ import (
 
 func main() {
 	var port int
-	flag.IntVar(&port, "port", 8080, "go backend server port")
+	flag.IntVar(&port, "port", 8080, "Go backend server port")
 	flag.Parse()
 
 	app, err := app.NewApplication()
@@ -20,7 +20,7 @@ func main() {
 	}
 	defer app.DB.Close()
 
-	app.Logger.Printf("we are running out app on port %d\n", port)
+	app.Logger.Printf("We are running out app on port %d\n", port)
 
 	r := routes.SetupRoutes(app)
 
