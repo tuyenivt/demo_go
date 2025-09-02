@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS workouts_entries (
+CREATE TABLE IF NOT EXISTS workout_entries (
     id BIGSERIAL PRIMARY KEY,
     workout_id BIGINT NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
     exercise_name VARCHAR(255) NOT NULL,

@@ -32,3 +32,42 @@ docker run -d --network devnet --name workout-postgres -e POSTGRES_USER=username
 go get -u github.com/go-chi/chi/v5
 go get github.com/jackc/pgx/v4/stdlib
 ```
+
+3. Testing APIs
+
+### Create workout
+
+```shell
+curl -X POST http://localhost:8080/workouts \
+     -H "Content-Type: application/json" \
+     -d '{
+           "title": "Title 1",
+           "description": "Description 1",
+           "duration_minutes": 60,
+           "calories_burned": 500,
+           "entries": [
+                {
+                    "exercise_name": "Exercise Name 1",
+                    "sets": 1,
+                    "reps": 2,
+                    "weight": 15.1,
+                    "notes": "Note 1",
+                    "order_index": 1
+                },
+                {
+                    "exercise_name": "Exercise Name 2",
+                    "sets": 2,
+                    "reps": 3,
+                    "weight": 15.2,
+                    "notes": "Note 2",
+                    "order_index": 2
+                }
+           ]
+         }'
+```
+
+### Get workout
+
+```shell
+curl http://localhost:8080/workouts/1
+```
