@@ -13,6 +13,7 @@ import (
 type Application struct {
 	Logger         *log.Logger
 	WorkoutHandler *api.WorkoutHandler
+	UserHandler    *api.UserHandler
 	DB             *sql.DB
 }
 
@@ -24,13 +25,16 @@ func NewApplication() (*Application, error) {
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	workoutstore := store.NewPostgreWorkoutStore(pgDB)
+	workoutStore := store.NewPostgreWorkoutStore(pgDB)
+	userStore := store.NewPostgreUserStore(pgDB)
 
-	workoutHandler := api.NewWorkoutHandler(workoutstore)
+	workoutHandler := api.NewWorkoutHandler(workoutStore)
+	userHandler := api.NewUserHandler(userStore, logger)
 
 	app := &Application{
 		Logger:         logger,
 		WorkoutHandler: workoutHandler,
+		UserHandler:    userHandler,
 		DB:             pgDB,
 	}
 	return app, nil

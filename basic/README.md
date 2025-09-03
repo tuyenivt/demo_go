@@ -108,3 +108,22 @@ curl -X PUT http://localhost:8080/workouts/1 \
 ```shell
 curl -X DELETE http://localhost:8080/workouts/1
 ```
+
+### Create user
+
+```shell
+curl -X POST http://localhost:8080/users \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "username1",
+           "email": "username1@example.com",
+           "password": "password1",
+           "bio": "bio1"
+         }'
+```
+
+### Get user
+
+```shell
+curl http://localhost:8080/users/username1
+```

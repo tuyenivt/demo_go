@@ -2,12 +2,38 @@ package store
 
 import (
 	"database/sql"
+	"errors"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type password struct {
 	plainText *string
 	hash      []byte
+}
+
+func (p *password) SetPassword(plainTextPassword string) error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(plainTextPassword), 12) // 12 is security standard balance performance and secure
+	if err != nil {
+		return err
+	}
+	p.plainText = &plainTextPassword
+	p.hash = hash
+	return nil
+}
+
+func (p *password) CheckPassword(plainTextPassword string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword(p.hash, []byte(plainTextPassword))
+	if err != nil {
+		switch {
+		case errors.Is(err, bcrypt.ErrMismatchedHashAndPassword):
+			return false, nil
+		default:
+			return false, err
+		}
+	}
+	return true, nil
 }
 
 type User struct {
@@ -54,7 +80,7 @@ func (us *PostgreUserStore) GetUserByUsername(username string) (*User, error) {
 	FROM users 
 	WHERE username = $1
 	`
-	err := us.db.QueryRow(query, username).Scan(&user.ID, &user.Username, &user.PasswordHash.hash, &user.Bio, &user.CreatedAt, &user.UpdatedAt)
+	err := us.db.QueryRow(query, username).Scan(&user.ID, &user.Username, &user.Email, &user.PasswordHash.hash, &user.Bio, &user.CreatedAt, &user.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return nil, sql.ErrNoRows
 	} else if err != nil {
