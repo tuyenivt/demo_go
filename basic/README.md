@@ -127,3 +127,14 @@ curl -X POST http://localhost:8080/users \
 ```shell
 curl http://localhost:8080/users/username1
 ```
+
+### Create token
+
+```shell
+curl -X POST http://localhost:8080/tokens \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "username1",
+           "password": "password1"
+         }'
+```
