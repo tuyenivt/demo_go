@@ -46,12 +46,12 @@ type User struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-type PostgreUserStore struct {
+type PostgresUserStore struct {
 	db *sql.DB
 }
 
-func NewPostgreUserStore(db *sql.DB) *PostgreUserStore {
-	return &PostgreUserStore{db: db}
+func NewPostgresUserStore(db *sql.DB) *PostgresUserStore {
+	return &PostgresUserStore{db: db}
 }
 
 type UserStore interface {
@@ -60,7 +60,7 @@ type UserStore interface {
 	UpdateUser(*User) error
 }
 
-func (us *PostgreUserStore) CreateUser(user *User) error {
+func (us *PostgresUserStore) CreateUser(user *User) error {
 	query := `
 	INSERT INTO users (username, email, password_hash, bio) 
 	VALUES ($1, $2, $3, $4) 
@@ -73,7 +73,7 @@ func (us *PostgreUserStore) CreateUser(user *User) error {
 	return nil
 }
 
-func (us *PostgreUserStore) GetUserByUsername(username string) (*User, error) {
+func (us *PostgresUserStore) GetUserByUsername(username string) (*User, error) {
 	user := &User{PasswordHash: password{}}
 	query := `
 	SELECT id, username, email, password_hash, bio, created_at, updated_at 
@@ -89,7 +89,7 @@ func (us *PostgreUserStore) GetUserByUsername(username string) (*User, error) {
 	return user, nil
 }
 
-func (us *PostgreUserStore) UpdateUser(user *User) error {
+func (us *PostgresUserStore) UpdateUser(user *User) error {
 	_, err := us.GetUserByUsername(user.Username)
 	if err == sql.ErrNoRows {
 		return sql.ErrNoRows

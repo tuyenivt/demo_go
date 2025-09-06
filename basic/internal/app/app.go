@@ -26,8 +26,8 @@ func NewApplication() (*Application, error) {
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	workoutStore := store.NewPostgreWorkoutStore(pgDB)
-	userStore := store.NewPostgreUserStore(pgDB)
+	workoutStore := store.NewPostgresWorkoutStore(pgDB)
+	userStore := store.NewPostgresUserStore(pgDB)
 	tokenStore := store.NewPostgresTokenStore(pgDB)
 
 	workoutHandler := api.NewWorkoutHandler(workoutStore)

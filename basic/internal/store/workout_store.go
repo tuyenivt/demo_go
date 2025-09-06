@@ -24,12 +24,12 @@ type WorkoutEntry struct {
 	OrderIndex      int     `json:"order_index"`
 }
 
-type PostgreWorkoutStore struct {
+type PostgresWorkoutStore struct {
 	db *sql.DB
 }
 
-func NewPostgreWorkoutStore(db *sql.DB) *PostgreWorkoutStore {
-	return &PostgreWorkoutStore{db: db}
+func NewPostgresWorkoutStore(db *sql.DB) *PostgresWorkoutStore {
+	return &PostgresWorkoutStore{db: db}
 }
 
 type WorkoutStore interface {
@@ -39,7 +39,7 @@ type WorkoutStore interface {
 	DeleteWorkoutByID(id int64) error
 }
 
-func (pg *PostgreWorkoutStore) GetWorkoutByID(id int64) (*Workout, error) {
+func (pg *PostgresWorkoutStore) GetWorkoutByID(id int64) (*Workout, error) {
 	workout := &Workout{}
 	query := `
 	SELECT id, title, description, duration_minutes, calories_burned
@@ -76,7 +76,7 @@ func (pg *PostgreWorkoutStore) GetWorkoutByID(id int64) (*Workout, error) {
 	return workout, nil
 }
 
-func (pg *PostgreWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error) {
+func (pg *PostgresWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error) {
 	tx, err := pg.db.Begin()
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (pg *PostgreWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error)
 	return workout, nil
 }
 
-func (pg *PostgreWorkoutStore) UpdateWorkout(workout *Workout) error {
+func (pg *PostgresWorkoutStore) UpdateWorkout(workout *Workout) error {
 	tx, err := pg.db.Begin()
 	if err != nil {
 		return err
@@ -156,7 +156,7 @@ func (pg *PostgreWorkoutStore) UpdateWorkout(workout *Workout) error {
 	return tx.Commit()
 }
 
-func (pg *PostgreWorkoutStore) DeleteWorkoutByID(id int64) error {
+func (pg *PostgresWorkoutStore) DeleteWorkoutByID(id int64) error {
 	query := `DELETE FROM workouts WHERE id = $1`
 	result, err := pg.db.Exec(query, id)
 	if err != nil {
