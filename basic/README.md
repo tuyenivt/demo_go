@@ -138,3 +138,15 @@ curl -X POST http://localhost:8080/tokens \
            "password": "password1"
          }'
 ```
+
+### Delete token
+
+```shell
+curl -X DELETE http://localhost:8080/tokens \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "username1",
+           "password": "password1",
+           "scope": "Authentication"
+         }'
+```

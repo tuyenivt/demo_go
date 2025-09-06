@@ -20,6 +20,7 @@ func SetupRoutes(app *app.Application) *chi.Mux {
 	r.Post("/users", app.UserHandler.HandleRegisterUser)
 
 	r.Post("/tokens", app.TokenHandler.HandleCreateNewToken)
+	r.Delete("/tokens", app.TokenHandler.HandleDeleteAllTokensByUserID)
 
 	return r
 }

@@ -21,6 +21,12 @@ type createTokenRequest struct {
 	Password string `json:"password"`
 }
 
+type deleteTokenRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Scope    string `json:"scope"`
+}
+
 func NewTokenHandler(tokenStore store.TokenStore, userStore store.UserStore, logger *log.Logger) *TokenHandler {
 	return &TokenHandler{tokenStore: tokenStore, userStore: userStore, logger: logger}
 }
@@ -63,4 +69,42 @@ func (th *TokenHandler) HandleCreateNewToken(w http.ResponseWriter, r *http.Requ
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(token)
+}
+
+func (th *TokenHandler) HandleDeleteAllTokensByUserID(w http.ResponseWriter, r *http.Request) {
+	var req deleteTokenRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		th.logger.Printf("ERROR: decoding delete token user request got error: %v", fmt.Errorf("%w", err))
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	user, err := th.userStore.GetUserByUsername(req.Username)
+	if err != nil || user == nil {
+		th.logger.Printf("ERROR: GetUserByUsername got error: %v", fmt.Errorf("%w", err))
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	checkPasswordResult, err := user.PasswordHash.CheckPassword(req.Password)
+	if err != nil {
+		th.logger.Printf("ERROR: PasswordHash.CheckPassword got error: %v", fmt.Errorf("%w", err))
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	if !checkPasswordResult {
+		http.Error(w, "Invalid credentials", http.StatusInternalServerError)
+		return
+	}
+
+	err = th.tokenStore.DeleteAllTokensByUserID(user.ID, req.Scope)
+	if err != nil {
+		th.logger.Printf("ERROR: tokenStore.DeleteAllTokensByUserID got error: %v", fmt.Errorf("%w", err))
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
