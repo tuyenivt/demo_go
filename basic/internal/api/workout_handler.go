@@ -1,6 +1,7 @@
 package api
 
 import (
+	"basic/internal/middleware"
 	"basic/internal/store"
 	"database/sql"
 	"encoding/json"
@@ -53,6 +54,14 @@ func (wh *WorkoutHandler) HandleCreateWorkout(w http.ResponseWriter, r *http.Req
 		http.Error(w, "Invalid workout data", http.StatusBadRequest)
 		return
 	}
+
+	currentUser := middleware.GetUser(r)
+	if currentUser == nil || currentUser.IsAnonymous() {
+		http.Error(w, "You must be logged in to create a workout", http.StatusUnauthorized)
+		return
+	}
+	workout.UserID = currentUser.ID
+
 	createdWorkout, err := wh.workoutStore.CreateWorkout(&workout)
 	if err != nil {
 		http.Error(w, "Create workout failed", http.StatusInternalServerError)
@@ -100,6 +109,16 @@ func (wh *WorkoutHandler) HandleUpdateWorkout(w http.ResponseWriter, r *http.Req
 	existingWorkout.CaloriesBurned = workout.CaloriesBurned
 	existingWorkout.Entries = workout.Entries
 
+	currentUser := middleware.GetUser(r)
+	if currentUser == nil || currentUser.IsAnonymous() {
+		http.Error(w, "You must be logged in to update this workout", http.StatusUnauthorized)
+		return
+	}
+	if existingWorkout.UserID != currentUser.ID {
+		http.Error(w, "You are not authorized to update this workout", http.StatusForbidden)
+		return
+	}
+
 	err = wh.workoutStore.UpdateWorkout(existingWorkout)
 	if err != nil {
 		http.Error(w, "Update workout failed", http.StatusInternalServerError)
@@ -130,6 +149,25 @@ func (wh *WorkoutHandler) HandleDeleteWorkoutByID(w http.ResponseWriter, r *http
 		return
 	}
 	wh.logger.Printf("Requesting delete workout data with id: %d\n", workoutID)
+
+	currentUser := middleware.GetUser(r)
+	if currentUser == nil || currentUser.IsAnonymous() {
+		http.Error(w, "You must be logged in to delete this workout", http.StatusUnauthorized)
+		return
+	}
+
+	workoutOwner, err := wh.workoutStore.GetWorkoutOwner(workoutID)
+	if err == sql.ErrNoRows {
+		http.Error(w, "Can't found workout data", http.StatusNotFound)
+		return
+	} else if err != nil {
+		http.Error(w, "Can't fetch workout data", http.StatusInternalServerError)
+		return
+	}
+	if workoutOwner != currentUser.ID {
+		http.Error(w, "You are not authorized to delete this workout", http.StatusForbidden)
+		return
+	}
 
 	err = wh.workoutStore.DeleteWorkoutByID(workoutID)
 	if err == sql.ErrNoRows {
