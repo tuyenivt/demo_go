@@ -35,13 +35,52 @@ go get github.com/jackc/pgx/v4/stdlib
 
 3. Testing APIs
 
+### Health check
+
+```shell
+curl http://localhost:8080/health
+```
+
+### Create user
+
+```shell
+curl -X POST http://localhost:8080/users \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "username1",
+           "email": "username1@example.com",
+           "password": "password1",
+           "bio": "bio1"
+         }'
+```
+
+### Create token
+
+```shell
+curl -X POST http://localhost:8080/tokens \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "username1",
+           "password": "password1"
+         }'
+{"token":"67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA","expiry":"2025-09-09T07:56:00.117031+07:00"}
+```
+
+### Get user
+
+```shell
+curl http://localhost:8080/users/username1 -H "Authorization: Bearer 67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA"
+```
+
 ### Create workout
 
 ```shell
 curl -X POST http://localhost:8080/workouts \
      -H "Content-Type: application/json" \
+     -H "Authorization: Bearer 67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA" \
      -d '{
            "title": "Title 1",
+           "user_id": 1,
            "description": "Description 1",
            "duration_minutes": 60,
            "calories_burned": 500,
@@ -69,7 +108,7 @@ curl -X POST http://localhost:8080/workouts \
 ### Get workout
 
 ```shell
-curl http://localhost:8080/workouts/1
+curl http://localhost:8080/workouts/1 -H "Authorization: Bearer 67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA"
 ```
 
 ### Update workout
@@ -77,8 +116,10 @@ curl http://localhost:8080/workouts/1
 ```shell
 curl -X PUT http://localhost:8080/workouts/1 \
      -H "Content-Type: application/json" \
+     -H "Authorization: Bearer 67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA" \
      -d '{
            "title": "Title 1.1",
+           "user_id": 1,
            "description": "Description 1.1",
            "duration_minutes": 61,
            "calories_burned": 501,
@@ -106,37 +147,7 @@ curl -X PUT http://localhost:8080/workouts/1 \
 ### Delete workout
 
 ```shell
-curl -X DELETE http://localhost:8080/workouts/1
-```
-
-### Create user
-
-```shell
-curl -X POST http://localhost:8080/users \
-     -H "Content-Type: application/json" \
-     -d '{
-           "username": "username1",
-           "email": "username1@example.com",
-           "password": "password1",
-           "bio": "bio1"
-         }'
-```
-
-### Get user
-
-```shell
-curl http://localhost:8080/users/username1
-```
-
-### Create token
-
-```shell
-curl -X POST http://localhost:8080/tokens \
-     -H "Content-Type: application/json" \
-     -d '{
-           "username": "username1",
-           "password": "password1"
-         }'
+curl -X DELETE http://localhost:8080/workouts/1 -H "Authorization: Bearer 67YLX7MHB6CHVWSKMKQU3S3Q6PQM7G2L5VUYY362KVCRO3WBA4UA"
 ```
 
 ### Delete token
