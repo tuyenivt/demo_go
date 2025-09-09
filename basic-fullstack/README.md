@@ -1,0 +1,39 @@
+# Basic Fullstack
+
+## Overview
+
+- A fullstack Go practical project.
+
+## Quick Start
+
+1. Run server
+
+```bash
+go run main.go -port 8080
+```
+
+Access the service at `http://localhost:8080/health`
+
+2. Local Development
+
+- Prepare database with docker (or local installation)
+
+```shell
+docker network create devnet
+docker run -d --network devnet --name movie-postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=moviedb -p 5432:5432 postgres:17.6-alpine
+```
+
+- Install Go 1.25 or higher
+- Install dependencies
+
+```shell
+
+```
+
+3. Testing APIs
+
+### Health check
+
+```shell
+curl http://localhost:8080/health
+```
