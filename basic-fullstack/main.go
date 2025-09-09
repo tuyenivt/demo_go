@@ -9,6 +9,7 @@ import (
 
 func main() {
 	http.HandleFunc("/health", healthCheck)
+	http.Handle("/", http.FileServer(http.Dir("public")))
 
 	server := &http.Server{
 		Addr:         ":8080",
