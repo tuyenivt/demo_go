@@ -27,7 +27,8 @@ docker run -d --network devnet --name movie-postgres -e POSTGRES_USER=username -
 - Install dependencies
 
 ```shell
-
+go get github.com/joho/godotenv
+go get github.com/lib/pq
 ```
 
 3. Testing APIs
