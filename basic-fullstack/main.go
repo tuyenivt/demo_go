@@ -1,6 +1,7 @@
 package main
 
 import (
+	"basic-fullstack/logger"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+	logger := initLogger()
+
 	http.HandleFunc("/health", healthCheck)
 	http.Handle("/", http.FileServer(http.Dir("public")))
 
@@ -18,13 +21,22 @@ func main() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	log.Println("Server starting...")
+	logger.Info("Server starting...")
 	err := server.ListenAndServe()
 	if err != nil {
-		log.Fatalf("Server can't start. Error: %v", err)
+		logger.Error("Server can't start. Error: %v", err)
 	}
 }
 
 func healthCheck(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Status is available\n")
+}
+
+func initLogger() *logger.Logger {
+	logger, err := logger.NewLogger("movie.log")
+	if err != nil {
+		log.Fatalf("Failed to initialize logger. Error: %v", err)
+	}
+	defer logger.Close()
+	return logger
 }
