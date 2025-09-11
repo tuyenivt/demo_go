@@ -1,7 +1,7 @@
 package main
 
 import (
-	"basic-fullstack/logger"
+	"basic-fullstack/internal/logger"
 	"fmt"
 	"log"
 	"net/http"
