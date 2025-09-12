@@ -1,6 +1,7 @@
 package main
 
 import (
+	"basic-fullstack/internal/handlers"
 	"basic-fullstack/internal/logger"
 	"fmt"
 	"log"
@@ -11,8 +12,11 @@ import (
 func main() {
 	logger := initLogger()
 
+	movieHandler := handlers.NewMovieHandler()
+
 	http.HandleFunc("/health", healthCheck)
 	http.Handle("/", http.FileServer(http.Dir("public")))
+	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
 
 	server := &http.Server{
 		Addr:         ":8080",
