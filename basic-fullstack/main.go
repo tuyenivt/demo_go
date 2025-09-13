@@ -14,9 +14,9 @@ func main() {
 
 	movieHandler := handlers.NewMovieHandler()
 
+	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
 	http.HandleFunc("/health", healthCheck)
 	http.Handle("/", http.FileServer(http.Dir("public")))
-	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
 
 	server := &http.Server{
 		Addr:         ":8080",
