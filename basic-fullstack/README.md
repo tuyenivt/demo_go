@@ -23,6 +23,13 @@ docker network create devnet
 docker run -d --network devnet --name movie-postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -e POSTGRES_DB=moviedb -p 5432:5432 postgres:17.6-alpine
 ```
 
+- Load an initial database using a dump file in PostgreSQL: `./migrations/moviedb_backup.sql`
+
+```shell
+cd migrations
+PGPASSWORD="password" psql -h localhost -p 5432 -U username -d moviedb -f moviedb_backup.sql
+```
+
 - Install Go 1.25 or higher
 - Install dependencies
 
