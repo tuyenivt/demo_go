@@ -30,6 +30,8 @@ cd migrations
 PGPASSWORD="password" psql -h localhost -p 5432 -U username -d moviedb -f moviedb_backup.sql
 ```
 
+- Rename `.env.example` to `.env`, check `DATABASE_URL` and change if needed
+
 - Install Go 1.25 or higher
 - Install dependencies
 

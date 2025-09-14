@@ -3,13 +3,32 @@ package main
 import (
 	"basic-fullstack/internal/handlers"
 	"basic-fullstack/internal/logger"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
+
+	_ "github.com/lib/pq"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("No .env file was available")
+	}
+	dbConnStr := os.Getenv("DATABASE_URL")
+	if dbConnStr == "" {
+		log.Fatal("DATABASE_URL not set")
+	}
+	db, err := sql.Open("postgres", dbConnStr)
+	if err != nil {
+		log.Fatalf("Can't connect to database, error: %v", err)
+	}
+	defer db.Close()
+
 	logger := initLogger()
 
 	movieHandler := handlers.NewMovieHandler()
@@ -26,7 +45,7 @@ func main() {
 	}
 
 	logger.Info("Server starting...")
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		logger.Error("Server can't start. Error: %v", err)
 	}
