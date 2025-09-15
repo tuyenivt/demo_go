@@ -47,3 +47,9 @@ go get github.com/lib/pq
 ```shell
 curl http://localhost:8080/health
 ```
+
+### Get top movies
+
+```shell
+curl http://localhost:8080/api/movies/top
+```

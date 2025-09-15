@@ -1,6 +1,7 @@
 package main
 
 import (
+	"basic-fullstack/internal/data"
 	"basic-fullstack/internal/handlers"
 	"basic-fullstack/internal/logger"
 	"database/sql"
@@ -31,7 +32,12 @@ func main() {
 
 	logger := initLogger()
 
-	movieHandler := handlers.NewMovieHandler()
+	movieRepository, err := data.NewMovieRepository(db, logger)
+	if err != nil {
+		log.Fatalf("Failed to initialize movie repository, error: %v", err)
+	}
+
+	movieHandler := handlers.NewMovieHandler(movieRepository, logger)
 
 	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
 	http.HandleFunc("/health", healthCheck)
