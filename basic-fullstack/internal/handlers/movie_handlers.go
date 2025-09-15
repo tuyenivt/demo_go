@@ -26,11 +26,22 @@ func (mh *MovieHandler) writeJSONResponse(w http.ResponseWriter, data any) error
 	return nil
 }
 
+func (mh *MovieHandler) handleError(w http.ResponseWriter, err error, message string) bool {
+	if err != nil {
+		if err == data.ErrMovieNotFound {
+			http.Error(w, message, http.StatusNotFound)
+			return true
+		}
+		mh.logger.Error(message, err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return true
+	}
+	return false
+}
+
 func (mh *MovieHandler) GetTopMovies(w http.ResponseWriter, r *http.Request) {
 	movies, err := mh.store.GetTopMovies()
-	if err != nil {
-		mh.logger.Error("Failed to get top movies, error: %v", err)
-		http.Error(w, "Failed to get top movies", http.StatusInternalServerError)
+	if mh.handleError(w, err, "Failed to get top movies") {
 		return
 	}
 	if mh.writeJSONResponse(w, movies) != nil {
