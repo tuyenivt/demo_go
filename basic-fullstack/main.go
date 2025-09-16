@@ -40,6 +40,9 @@ func main() {
 	movieHandler := handlers.NewMovieHandler(movieRepository, logger)
 
 	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
+	http.HandleFunc("/api/movies/search", movieHandler.SearchMoviesByName)
+	http.HandleFunc("/api/movies/", movieHandler.GetMovieByID)
+	http.HandleFunc("/api/genres", movieHandler.GetAllGenres)
 	http.HandleFunc("/health", healthCheck)
 	http.Handle("/", http.FileServer(http.Dir("public")))
 

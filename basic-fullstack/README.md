@@ -53,3 +53,21 @@ curl http://localhost:8080/health
 ```shell
 curl http://localhost:8080/api/movies/top
 ```
+
+### Search movies by name
+
+```shell
+curl 'http://localhost:8080/api/movies/search?q=Lion&order=&genre='
+```
+
+### Get a movie by ID
+
+```shell
+curl http://localhost:8080/api/movies/1
+```
+
+### Get all genres
+
+```shell
+curl http://localhost:8080/api/genres
+```
