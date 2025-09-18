@@ -1,8 +1,8 @@
 window.app = {
-  search: (event) => {
-    event.preventDefault();
-    const keywords = document.querySelector("input[type=search]").value;
-  },
+  API,
+  Router,
 };
 
-window.addEventListener("DOMContentLoaded", () => {});
+window.addEventListener("DOMContentLoaded", () => {
+  app.Router.init();
+});
