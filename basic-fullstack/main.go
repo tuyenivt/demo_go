@@ -32,18 +32,26 @@ func main() {
 
 	logger := initLogger()
 
+	http.HandleFunc("/health", healthCheck)
+
 	movieRepository, err := data.NewMovieRepository(db, logger)
 	if err != nil {
 		log.Fatalf("Failed to initialize movie repository, error: %v", err)
 	}
-
 	movieHandler := handlers.NewMovieHandler(movieRepository, logger)
 
 	http.HandleFunc("/api/movies/top", movieHandler.GetTopMovies)
 	http.HandleFunc("/api/movies/search", movieHandler.SearchMoviesByName)
 	http.HandleFunc("/api/movies/", movieHandler.GetMovieByID)
 	http.HandleFunc("/api/genres", movieHandler.GetAllGenres)
-	http.HandleFunc("/health", healthCheck)
+
+	catchAllHandler := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./public/index.html")
+	}
+	http.HandleFunc("/movies", catchAllHandler)
+	http.HandleFunc("/movies/", catchAllHandler)
+	http.HandleFunc("/account/", catchAllHandler)
+
 	http.Handle("/", http.FileServer(http.Dir("public")))
 
 	server := &http.Server{
