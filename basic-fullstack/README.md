@@ -38,6 +38,7 @@ PGPASSWORD="password" psql -h localhost -p 5432 -U username -d moviedb -f movied
 ```shell
 go get github.com/joho/godotenv
 go get github.com/lib/pq
+go get golang.org/x/crypto/bcrypt
 ```
 
 3. Testing APIs
