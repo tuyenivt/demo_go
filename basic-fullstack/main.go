@@ -34,6 +34,15 @@ func main() {
 
 	http.HandleFunc("/health", healthCheck)
 
+	accountRepo, err := data.NewAccountRepository(db, logger)
+	if err != nil {
+		log.Fatalf("Failed to initialize account repository: %v", err)
+	}
+	accountHandler := handlers.NewAccountHandler(accountRepo, logger)
+
+	http.HandleFunc("/api/account/register/", accountHandler.Register)
+	http.HandleFunc("/api/account/authenticate/", accountHandler.Authenticate)
+
 	movieRepository, err := data.NewMovieRepository(db, logger)
 	if err != nil {
 		log.Fatalf("Failed to initialize movie repository, error: %v", err)
