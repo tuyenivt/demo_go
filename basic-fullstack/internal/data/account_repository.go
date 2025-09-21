@@ -5,6 +5,7 @@ import (
 	"basic-fullstack/internal/models"
 	"database/sql"
 	"errors"
+	"strconv"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -221,7 +222,7 @@ func (r *AccountRepository) SaveCollection(user models.User, movieID int, collec
 		return false, err
 	}
 
-	r.logger.Info("Successfully added movie " + string(movieID) + " to " + collection + " for user")
+	r.logger.Info("Successfully added movie " + strconv.Itoa(movieID) + " to " + collection + " for user")
 	return true, nil
 }
 
