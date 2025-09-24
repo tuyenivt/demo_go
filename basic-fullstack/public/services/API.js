@@ -23,6 +23,28 @@ export const API = {
       app.showError();
     }
   },
+  register: async (name, email, password) => {
+    return await API.send("account/register/", { name, email, password });
+  },
+  authenticate: async (email, password) => {
+    return await API.send("account/authenticate/", { email, password });
+  },
+  send: async (service, args) => {
+    try {
+      const response = await fetch(API.baseURL + service, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(args),
+      });
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      console.error(e);
+      app.showError();
+    }
+  },
 };
 
 export default API;
