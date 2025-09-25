@@ -23,15 +23,24 @@ const Router = {
     for (const r of routes) {
       if (typeof r.path === "string" && r.path === routePath) {
         pageElement = new r.component();
-        break;
+        pageElement.loggedIn = r.loggedIn;
       } else if (r.path instanceof RegExp) {
         const match = r.path.exec(route);
         if (match) {
           const params = match.slice(1);
           pageElement = new r.component();
+          pageElement.loggedIn = r.loggedIn;
+
           pageElement.params = params;
-          break;
         }
+      }
+      if (pageElement) {
+        // A page was found, we checked if we have access to it.
+        if (pageElement.loggedIn && app.Store.loggedIn == false) {
+          app.Router.go("/account/login");
+          return;
+        }
+        break;
       }
     }
     if (pageElement == null) {

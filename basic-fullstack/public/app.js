@@ -49,6 +49,7 @@ window.app = {
     if (errors.length == 0) {
       const response = await API.register(name, email, password);
       if (response.success) {
+        app.Store.jwt = response.jwt;
         app.Router.go("/account/");
       } else {
         app.showError(response.message, false);
@@ -68,6 +69,7 @@ window.app = {
     if (errors.length == 0) {
       const response = await API.authenticate(email, password);
       if (response.success) {
+        app.Store.jwt = response.jwt;
         app.Router.go("/account/");
       } else {
         app.showError(response.message, false);
