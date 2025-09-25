@@ -13,15 +13,14 @@ export const API = {
     return await API.fetch("genres");
   },
   fetch: async (service, args) => {
-    try {
-      const queryString = args ? new URLSearchParams(args).toString() : "";
-      const response = await fetch(API.baseURL + service + "?" + queryString);
-      const result = await response.json();
-      return result;
-    } catch (e) {
-      console.error(e);
-      app.showError();
-    }
+    const queryString = args ? new URLSearchParams(args).toString() : "";
+    const response = await fetch(API.baseURL + service + "?" + queryString, {
+      headers: {
+        Authorization: app.Store.jwt ? `Bearer ${app.Store.jwt}` : null,
+      },
+    });
+    const result = await response.json();
+    return result;
   },
   register: async (name, email, password) => {
     return await API.send("account/register/", { name, email, password });
@@ -30,20 +29,36 @@ export const API = {
     return await API.send("account/authenticate/", { email, password });
   },
   send: async (service, args) => {
+    const response = await fetch(API.baseURL + service, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: app.Store.jwt ? `Bearer ${app.Store.jwt}` : null,
+      },
+      body: JSON.stringify(args),
+    });
+    const result = await response.json();
+    return result;
+  },
+  getFavorites: async () => {
     try {
-      const response = await fetch(API.baseURL + service, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(args),
-      });
-      const result = await response.json();
-      return result;
+      return await API.fetch("account/favorites");
     } catch (e) {
-      console.error(e);
-      app.showError();
+      app.Router.go("/account/");
     }
+  },
+  getWatchlist: async () => {
+    try {
+      return await API.fetch("account/watchlist");
+    } catch (e) {
+      app.Router.go("/account/");
+    }
+  },
+  saveToCollection: async (movie_id, collection) => {
+    return await API.send("account/save-to-collection/", {
+      movie_id,
+      collection,
+    });
   },
 };
 
