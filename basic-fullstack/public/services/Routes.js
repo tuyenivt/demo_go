@@ -26,10 +26,12 @@ export const routes = [
   },
   {
     path: "/account/favorites",
-    component: FavoritesPage,
+    component: FavoritePage,
+    loggedIn: true,
   },
   {
     path: "/account/watchlist",
     component: WatchlistPage,
+    loggedIn: true,
   },
 ];
