@@ -39,6 +39,13 @@ PGPASSWORD="password" psql -h localhost -p 5432 -U username -d moviedb -f movied
 go get github.com/joho/godotenv
 go get github.com/lib/pq
 go get golang.org/x/crypto/bcrypt
+go get github.com/golang-jwt/jwt/v5
+```
+
+- Create a 128-character secure hex string and set to `JWT_SECRET` in `.env` file
+
+```shell
+openssl rand -hex 64
 ```
 
 3. Testing APIs
