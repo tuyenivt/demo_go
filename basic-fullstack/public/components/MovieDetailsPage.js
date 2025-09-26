@@ -48,6 +48,13 @@ export default class MovieDetailsPage extends HTMLElement {
             `;
       ulCast.appendChild(li);
     });
+
+    this.querySelector("#btnFavorites").addEventListener("click", () => {
+      app.saveToCollection(this.movie.id, "favorite");
+    });
+    this.querySelector("#btnWatchlist").addEventListener("click", () => {
+      app.saveToCollection(this.movie.id, "watchlist");
+    });
   }
 
   connectedCallback() {
