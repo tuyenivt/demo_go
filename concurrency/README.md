@@ -3,4 +3,4 @@
 ## Overview
 
 - A concurrency Go practical project.
-- Covering goroutine, waitgroup.
+- Covering goroutine, waitgroup, channel.
