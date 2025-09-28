@@ -28,6 +28,6 @@ func simpleWaitGroup() {
 }
 
 func wgHello(name string, wg *sync.WaitGroup) {
-	fmt.Printf("WaitGroup Hello, %s\n", name)
 	defer wg.Done()
+	fmt.Printf("WaitGroup Hello, %s\n", name)
 }
