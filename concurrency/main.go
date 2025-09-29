@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -18,6 +19,8 @@ func main() {
 	multiChannel()
 
 	raceConditionMutex()
+
+	raceConditionAtomic()
 }
 
 func hello(name string) {
@@ -113,4 +116,30 @@ func raceConditionMutexSubtract() {
 		raceConditionMutexMutex.Unlock()
 	}
 	raceConditionMutexWaitGroup.Done()
+}
+
+var raceConditionAtomicShareValue int32 = 1000
+var raceConditionAtomicWaitGroup = sync.WaitGroup{}
+
+func raceConditionAtomic() {
+	fmt.Println("raceConditionAtomicShareValue start value = ", raceConditionAtomicShareValue)
+	raceConditionAtomicWaitGroup.Add(2)
+	go raceConditionAtomicAdd()
+	go raceConditionAtomicSubtract()
+	raceConditionAtomicWaitGroup.Wait()
+	fmt.Println("raceConditionAtomicShareValue end value = ", raceConditionAtomicShareValue)
+}
+
+func raceConditionAtomicAdd() {
+	for i := 0; i < 1000; i++ {
+		atomic.AddInt32(&raceConditionAtomicShareValue, 100)
+	}
+	raceConditionAtomicWaitGroup.Done()
+}
+
+func raceConditionAtomicSubtract() {
+	for i := 0; i < 1000; i++ {
+		atomic.AddInt32(&raceConditionAtomicShareValue, -100)
+	}
+	raceConditionAtomicWaitGroup.Done()
 }
