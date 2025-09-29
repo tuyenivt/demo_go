@@ -80,6 +80,9 @@ Loop:
 		case msg := <-ch3:
 			fmt.Print("MultiChannel 3 - " + msg)
 			break Loop
+		default:
+			fmt.Println("No data from any channel...")
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
