@@ -24,4 +24,6 @@ func main() {
 	app.SimpleContextTimeout()
 
 	app.SimpleFanInFanOut()
+
+	app.SimpleSyncPool()
 }
