@@ -28,4 +28,6 @@ func main() {
 	app.SimpleSyncPool()
 
 	app.SimpleSyncOnce()
+
+	app.SimpleGracefulShutdown()
 }
