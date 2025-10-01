@@ -26,4 +26,6 @@ func main() {
 	app.SimpleFanInFanOut()
 
 	app.SimpleSyncPool()
+
+	app.SimpleSyncOnce()
 }
