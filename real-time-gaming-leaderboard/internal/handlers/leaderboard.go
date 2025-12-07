@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"net/http"
+	"real-time-gaming-leaderboard/internal/service"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/service"
 )
 
 // LeaderboardHandler handles HTTP requests for the leaderboard

@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"real-time-gaming-leaderboard/internal/config"
+	"real-time-gaming-leaderboard/internal/handlers"
+	"real-time-gaming-leaderboard/internal/middleware"
+	"real-time-gaming-leaderboard/internal/redis"
+	"real-time-gaming-leaderboard/internal/service"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/config"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/handlers"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/middleware"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/redis"
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/service"
 	"go.uber.org/zap"
 )
 

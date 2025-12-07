@@ -24,8 +24,8 @@ The system uses Redis sorted sets for leaderboard data storage, with the followi
 
 ## Prerequisites
 
-- Go 1.24 or higher
-- Redis 7.0 or higher (multiple instances for sharding)
+- Go 1.25 or higher
+- Redis 8.4 or higher (multiple instances for sharding)
 
 ## Configuration
 
@@ -42,11 +42,13 @@ LOG_LEVEL=info
 ## Installation
 
 1. Install dependencies:
+
 ```bash
 go mod download
 ```
 
 2. Run the application:
+
 ```bash
 go run cmd/server/main.go
 ```

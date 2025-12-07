@@ -60,7 +60,7 @@ func (c *ShardedRedisClient) getClient(key string) *redis.Client {
 // AddScore adds or updates a player's score
 func (c *ShardedRedisClient) AddScore(ctx context.Context, playerID string, score float64) error {
 	client := c.getClient(playerID)
-	fmt.Sprintf("leaderboard:%s", playerID)
+	fmt.Printf("leaderboard:%s", playerID)
 	return client.ZAdd(ctx, "leaderboard", &redis.Z{
 		Score:  score,
 		Member: playerID,

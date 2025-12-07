@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/yourusername/real-time-gaming-leaderboard/internal/redis"
+	"real-time-gaming-leaderboard/internal/redis"
 )
 
 // LeaderboardService handles leaderboard operations
