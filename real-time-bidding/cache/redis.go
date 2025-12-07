@@ -68,12 +68,15 @@ func (c *RedisCache) UpdateCampaignBudget(ctx context.Context, campaignID string
 	pipe := c.client.Pipeline()
 
 	// Get current budget
-	currentBudget := pipe.Get(ctx, key)
+	currentBudget, err := pipe.Get(ctx, key).Float64()
+	if err != nil {
+		return err
+	}
 
 	// Update budget
-	pipe.Set(ctx, key, currentBudget.Val()-amount, 24*time.Hour)
+	pipe.Set(ctx, key, currentBudget-amount, 24*time.Hour)
 
-	_, err := pipe.Exec(ctx)
+	_, err = pipe.Exec(ctx)
 	return err
 }
 

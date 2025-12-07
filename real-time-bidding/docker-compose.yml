@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   rtb-app:
@@ -16,7 +16,7 @@ services:
       - rtb-network
 
   redis:
-    image: redis:latest
+    image: redis:8.4-alpine
     ports:
       - "6379:6379"
     volumes:

@@ -1,10 +1,10 @@
 module real-time-bidding
 
-go 1.24.2
+go 1.25.5
 
 require (
 	github.com/joho/godotenv v1.5.1
-	github.com/redis/go-redis/v9 v9.5.1
+	github.com/redis/go-redis/v9 v9.17.2
 	github.com/stretchr/testify v1.9.0
 )
 

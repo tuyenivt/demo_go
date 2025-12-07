@@ -26,7 +26,7 @@ func (s *AuctionService) ProcessBidRequest(ctx context.Context, req *models.BidR
 	startTime := time.Now()
 
 	// Get user segments
-	segments, err := s.cache.GetUserSegments(ctx, req.UserID)
+	_, err := s.cache.GetUserSegments(ctx, req.UserID)
 	if err != nil {
 		return nil, err
 	}
