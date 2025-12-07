@@ -30,4 +30,6 @@ func main() {
 	app.SimpleSyncOnce()
 
 	app.SimpleGracefulShutdown()
+
+	app.SimpleWorkerPool()
 }
