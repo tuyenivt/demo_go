@@ -26,6 +26,11 @@ func simpleContextCancelHello(ctx context.Context, name string) {
 	i := 0
 	for {
 		i++
+		// optional to check for cancellation, avoid select no fairness and ctx.Done() got starvation
+		// if err := ctx.Err(); err != nil {
+		// 	fmt.Println("simpleContextCancel cancel result:", err)
+		// 	return
+		// }
 		select {
 		case <-ctx.Done():
 			fmt.Println("simpleContextCancel cancel result:", ctx.Err())
