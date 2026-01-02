@@ -2,7 +2,6 @@
 
 - [Basic](basic)
 - [Concurrency](concurrency)
-- [Testing](testing)
 - [gRPC](grpc)
 - [FHIR API Gateway & Integration Service](fhir-gateway)
 - [Real-time Bidding (RTB) System](real-time-bidding)
