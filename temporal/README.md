@@ -4,6 +4,30 @@
 
 - A temporal Go demo project.
 
+## Architecture Overview
+
+```
+---------------
+│   Client    │ Starts Order Workflow
+---------------
+       │
+       v
+-----------------------------------------------------------
+│              Order Processing Workflow                  │
+│  1. Validate Order Activity                             │
+│  2. Payment Child Workflow                              │
+│     |=> Authorize Payment Activity                      │
+│     |=> Capture Payment Activity                        │
+│  3. Reserve Inventory Activity                          │
+│  4. Send Notification Activity                          │
+-----------------------------------------------------------
+       │
+       v
+---------------
+│   Worker    | Executes Workflows & Activities
+---------------
+```
+
 ## Quick Start
 
 1. Start Temporal with docker
@@ -23,4 +47,10 @@ go mod download
 
 ```bash
 go run worker/main.go
+```
+
+4. Run client
+
+```bash
+go run client/main.go
 ```
